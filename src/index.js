@@ -2,11 +2,12 @@
 
 const app = require("./app"); // Import the Express app
 const connectDB = require("./db/db"); // Import the database connection function
-
+const cookieParser = require("cookie-parser");
 const PORT = process.env.PORT || 3000; // Set the port from environment or default to 3000
 
 // Connect to Database
 connectDB();
+app.use(cookieParser());
 
 // Start the Express server
 app.listen(PORT, () => {

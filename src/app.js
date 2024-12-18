@@ -8,12 +8,15 @@ const cors = require("cors");
 const corsConfig = require("./middleware/corsconfig");
 const errorHandler = require("./middleware/errorHandler");
 const routes = require("./routes"); // Routes folder
+const cookieParser = require("cookie-parser");
 
 // Create the Express app
 const app = express();
 
 //Middleware setup
 app.use(helmet()); // Security headers
+app.use(cookieParser());
+
 //app.use(cors(corsConfig)); // Cross-Origin Resource Sharing
 app.use(bodyParser.json()); // Parse JSON requests
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded requests

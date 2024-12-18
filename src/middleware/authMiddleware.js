@@ -1,28 +1,29 @@
 const jwt = require("jsonwebtoken");
-const userRepository = require("../repository/userRepository");
+const userService = require("../services/userService");
+const getuserid = require("../utils/getuserid");
+require("dotenv").config({ path: ".././.env" });
+const JWT_SECRET = process.env.JWT_SECRET; // Replace with your actual secret
 
 const authMiddleware = async (req, res, next) => {
   try {
     // Extract token from headers
-    const token = req.headers.authorization?.split(" ")[1];
+    const token = req.cookies.authToken;
     if (!token) {
       return res.status(401).json({ error: "Access token required" });
     }
 
     // Verify token
-    const decoded = jwt.verify(token, "ashish");
-
-    // Fetch user from database
-    const user = await userRepository.findById(decoded.id);
+    const decoded = jwt.decode(token, JWT_SECRET);
+    const user = await userService.findById(decoded.id);
     if (!user) {
       return res.status(401).json({ error: "Invalid token" });
     }
 
     // Attach user to request
-    req.authUser = user;
+
     next();
   } catch (err) {
-    return res.status(401).json({ error: "Authentication failed" });
+    throw err;
   }
 };
 

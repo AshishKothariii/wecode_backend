@@ -22,9 +22,9 @@ const loginUser = async (req, res) => {
 
     // Call the service layer to handle login logic
     const token = await userService.loginUser(email, password, res);
-
+    console.log(token);
     // Respond with the authentication token
-    res.status(200).json({ user_details });
+    res.status(200).json(token);
   } catch (error) {
     res.status(401).json({ error: "Invalid email or password" });
     throw error;

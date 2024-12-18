@@ -4,10 +4,7 @@ const userRepository = require("../repository/userRepository");
 
 const createProblem = async (problemData) => {
   try {
-    const user = userRepository.findUserById(problem_data.user_id);
-    if (!user.problem_setter) {
-      throw err(Error, "no permission to set problems");
-    }
+    const user = userRepository.findUserById(problemData.user_id);
 
     return await problemRepository.createProblem(problemData);
   } catch (err) {
@@ -18,7 +15,7 @@ const createProblem = async (problemData) => {
 const getProblemById = async (problemId) => {
   try {
     // Find the problem by ID
-    const problem = await Problem.findById(problemId);
+    const problem = await Problem.findById({ _id: problemId });
 
     // Check if problem exists
     if (!problem) {
@@ -33,7 +30,6 @@ const getProblemById = async (problemId) => {
       constraints: problem.constraints,
       solved_by: problem.solved_by,
       createdAt: problem.createdAt,
-      updatedAt: problem.updatedAt,
     };
 
     return problemData;

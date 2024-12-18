@@ -14,14 +14,12 @@ const createProblem = async (req, res) => {
       test_cases,
       output_cases,
     } = req.body;
+    user_id = await getUserId(req);
 
     if (!user_id) {
       return res.status(400).json({ message: "User ID is required" });
     }
-    user_id = getUserId(req);
-    if (!user_id) {
-      throw err;
-    }
+
     const problemData = {
       title,
       description,
@@ -37,14 +35,16 @@ const createProblem = async (req, res) => {
 
     res.status(201).json(newProblem);
   } catch (err) {
+    res.status(500).json({ error: err.message });
+
     throw err;
   }
 };
 
 const getProblemById = async (req, res) => {
   try {
-    const { problem_id } = req.params;
-
+    const problem_id = req.params.id;
+    console.log(problem_id);
     if (!problem_id) {
       return res.status(400).json({ message: "Problem ID is required" });
     }
@@ -56,6 +56,8 @@ const getProblemById = async (req, res) => {
     }
     res.status(200).json(problem);
   } catch (err) {
+    res.status(500).json({ error: err.message });
+
     throw err;
   }
 };
@@ -64,8 +66,8 @@ const getProblems = async (req, res) => {
     const problems = await problemService.getProblems();
 
     res.status(200).json(problems);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 

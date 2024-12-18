@@ -12,7 +12,14 @@ const getProblemById = async (problem_id) => {
     // Fetch the problem without populating user_id
     return await Problem.findById(problem_id).exec();
   } catch (err) {
-    throw new Error("Repository error while fetching problem");
+    throw err;
   }
 };
-module.exports = createProblem;
+const getProblem = async () => {
+  try {
+    return await Problem.find();
+  } catch (err) {
+    throw err;
+  }
+};
+module.exports = { createProblem, getProblemById, getProblem };

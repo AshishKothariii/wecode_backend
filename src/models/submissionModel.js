@@ -12,11 +12,18 @@ const submissionSchema = new mongoose.Schema({
   submission_url: { type: String, required: true },
   result: {
     type: String,
-    enum: ["accepted", "tle", "wrong_answer", "compilation_error", "error"],
-    default: "in queue",
-    required: true,
+    enum: [
+      "accepted",
+      "tle",
+      "wrong_answer",
+      "compilation_error",
+      "error",
+      "pending",
+    ],
+    default: "pending",
   },
   test_cases_passed: { type: Number },
   test_case_failed: { type: Number },
 });
-const submission = mongoose.model("Submission", userSchema);
+const Submission = mongoose.model("Submission", userSchema);
+module.exports = Submission;

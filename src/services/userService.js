@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt"); // Add bcrypt for hashing passwords
 const userRepository = require("../repository/userRepository");
 
-const JWT_SECRET = "your_jwt_secret"; // Replace with your secret key
-
+require("dotenv").config({ path: ".././.env" });
+const JWT_SECRET = process.env.JWT_SECRET;
 // Create a new user
 const createUser = async (userData) => {
   try {
@@ -23,8 +24,14 @@ const createUser = async (userData) => {
       throw new Error("Email is already in use");
     }
 
+    // Hash the password before saving
+
     // Save the user to the database
-    const user = await userRepository.createUser(userData);
+    const user = await userRepository.createUser({
+      ...userData,
+      password: userData.password, // Save the hashed password
+    });
+
     return { username: user.username, email: user.useremail };
   } catch (err) {
     throw err;
@@ -40,23 +47,22 @@ const loginUser = async (email, password, res) => {
       throw new Error("User not found");
     }
 
-    // Check if the password matches (assuming plain text password for now)
+    // Direct password comparison (plain text)
     if (user.password !== password) {
-      throw new Error("Invalid password");
+      throw new Error("Incorrect password");
     }
+
     // Generate JWT token
-    const token = jwt.sign({ id: user._id, email: user.email }, "ashish", {
-      expiresIn: "4h",
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "3600000",
     });
 
     // Set JWT token in HTTP-only cookie
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: true, // Set to true in production
+      secure: false, // Set to true in production
       sameSite: "Strict", // Prevents CSRF attacks
-      maxAge: 3600000, // 1 hour
     });
-
     return {
       username: user.username,
       email: user.email,
@@ -65,13 +71,14 @@ const loginUser = async (email, password, res) => {
     throw err;
   }
 };
+// Find user by ID
 const findById = async (userId) => {
   try {
     const user = await userRepository.findUserById(userId);
     return {
       name: user.name,
       email: user.email,
-      profile_pricture_url: user.profile_pricture_url,
+      profile_picture_url: user.profile_picture_url, // Corrected typo
       accepted_count: user.accepted_count,
     };
   } catch (err) {

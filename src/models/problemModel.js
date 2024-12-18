@@ -14,5 +14,6 @@ const problemSchema = new mongoose.Schema(
   },
   { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );
+const Problem = mongoose.model("Problem", problemSchema);
 
-module.exports = problemSchema;
+module.exports = Problem;
