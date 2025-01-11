@@ -7,10 +7,11 @@ const createProblem = async (problemData) => {
     throw err;
   }
 };
-const getProblemById = async (problem_id) => {
+const getProblemById = async (id) => {
   try {
     // Fetch the problem without populating user_id
-    return await Problem.findById(problem_id).exec();
+    const problem = await Problem.findOne({ _id: id });
+    return problem;
   } catch (err) {
     throw err;
   }

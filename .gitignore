@@ -1,3 +1,6 @@
-node_modules/
+api/node_modules/
 # Ignore environment variables file
-.env
+api/.env
+evaluation/node_modules
+evaluation/.env
+frontend/node_modules

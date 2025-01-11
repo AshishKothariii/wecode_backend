@@ -2,28 +2,19 @@ const mongoose = require("mongoose");
 const problem = require("./problemModel"); // Import the Post model
 const user = require("./userModel");
 const submissionSchema = new mongoose.Schema({
+  submission_id: { type: Number, required: true, unique: true },
   language: {
     type: String,
     required: true,
-    enum: ["c++", "java", "python"],
   },
   user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   problem_id: { type: mongoose.Schema.Types.ObjectId, ref: "problem" },
-  submission_url: { type: String, required: true },
+  code: { type: String },
   result: {
     type: String,
-    enum: [
-      "accepted",
-      "tle",
-      "wrong_answer",
-      "compilation_error",
-      "error",
-      "pending",
-    ],
     default: "pending",
   },
-  test_cases_passed: { type: Number },
-  test_case_failed: { type: Number },
+  test_cases_passed: { type: Number, default: 0 },
 });
-const Submission = mongoose.model("Submission", userSchema);
+const Submission = mongoose.model("Submission", submissionSchema);
 module.exports = Submission;

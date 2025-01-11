@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true }, // Email must be unique
     password: { type: String, required: true }, // Password is required
-    profile_picture_url: { type: String, default: "hello" },
     accepted_count: { type: Number, default: 0 },
     wrong_count: { type: Number, default: 0 },
     tle_count: { type: Number, default: 0 },

@@ -31,3 +31,10 @@ const getSubmissionsByUserId = async (data) => {
     throw err;
   }
 };
+module.exports = {
+  createSubmission,
+  updateSubmission,
+  getSubmissionBySubmissionId,
+  getSubmissionsByProblemId,
+  getSubmissionsByUserId,
+};
