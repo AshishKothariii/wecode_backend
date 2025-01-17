@@ -13,6 +13,7 @@ const createUser = async (userData) => {
 // Find a user by email
 const findUserByEmail = async (email) => {
   try {
+    console.log(email);
     // Use Mongoose's findOne method to search by email
     const user = await User.findOne({ email: email });
     return user; // Returns the user document or null if not found
@@ -23,7 +24,6 @@ const findUserByEmail = async (email) => {
 const findUserById = async (id) => {
   try {
     // Use Mongoose's findOne method to search by emai
-    console.log("hee");
     const user = await User.findOne({ _id: id });
     return user; // Returns the user document or null if not found
   } catch (err) {

@@ -1,18 +1,39 @@
 const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
-const upload = require("../middleware/multer"); // Multer middleware
 const submissionController = require("../controllers/submissionController");
+const rateLimit = require("../middleware/rateLimmiter");
+
+const {
+  getSubmissionsByUserId,
+} = require("../repository/submissionRepository");
 router.post(
   "/problem/:id",
   authMiddleware,
-  upload,
+  rateLimit.tokenLimiter,
   submissionController.submitByProblemId
 );
-router.post("/submit", submissionController.submitByProblemId);
-/*
-router.get("/:id", authMiddleware, submissionController);
-router.get("/problem/:id", authMiddleware, submissionController);
-router.get("/user/:id", authMiddleware, submissionController);
-*/
+router.get(
+  "/problem/:id",
+  authMiddleware,
+  rateLimit.tokenLimiter,
+
+  submissionController.getSubmissionsByProblemId
+);
+router.get("/:id", authMiddleware, submissionController.getSubmissionById);
+router.get(
+  "/user/:id",
+  authMiddleware,
+  rateLimit.tokenLimiter,
+
+  submissionController.getSubmissionByUserId
+);
+router.get(
+  "/problem/:problem_id/user/:user_id",
+  authMiddleware,
+  rateLimit.tokenLimiter,
+
+  submissionController.getSubmissionByProblemUserId
+);
+
 module.exports = router;

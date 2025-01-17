@@ -3,30 +3,23 @@ const bcrypt = require("bcrypt"); // Add bcrypt for hashing passwords
 const userRepository = require("../repository/userRepository");
 
 require("dotenv").config({ path: ".././.env" });
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = "ashishislord";
 // Create a new user
 const createUser = async (userData) => {
   try {
-    // Validation: Check if name, email, and password are provided
     if (!userData.name || !userData.email || !userData.password) {
       throw new Error("All fields (name, email, password) are required");
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userData.email)) {
       throw new Error("Invalid email format");
     }
-
-    // Check if user with the same email already exists
     const existingUser = await userRepository.findUserByEmail(userData.email);
     if (existingUser) {
       throw new Error("Email is already in use");
     }
 
-    // Hash the password before saving
-
-    // Save the user to the database
     const user = await userRepository.createUser({
       ...userData,
       password: userData.password, // Save the hashed password
@@ -38,7 +31,6 @@ const createUser = async (userData) => {
   }
 };
 
-// Login user (with JWT and cookie)
 const loginUser = async (email, password, res) => {
   try {
     // Find the user by email
@@ -78,7 +70,6 @@ const findById = async (userId) => {
     return {
       name: user.name,
       email: user.email,
-      profile_picture_url: user.profile_picture_url, // Corrected typo
       accepted_count: user.accepted_count,
     };
   } catch (err) {

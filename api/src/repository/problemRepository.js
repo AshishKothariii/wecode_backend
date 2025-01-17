@@ -10,7 +10,7 @@ const createProblem = async (problemData) => {
 const getProblemById = async (id) => {
   try {
     // Fetch the problem without populating user_id
-    const problem = await Problem.findOne({ _id: id });
+    const problem = await Problem.findOne({ problem_id: id });
     return problem;
   } catch (err) {
     throw err;
@@ -18,7 +18,14 @@ const getProblemById = async (id) => {
 };
 const getProblem = async () => {
   try {
-    return await Problem.find();
+    const problems = await Problem.find();
+    const problemsData = problems.map((problem) => ({
+      problemId: problem.problem_id, // MongoDB _id field is used as problemId
+      problemTitle: problem.title,
+      solvedBy: problem.solved_by,
+      user_name: problem.user_name,
+    }));
+    return problemsData;
   } catch (err) {
     throw err;
   }

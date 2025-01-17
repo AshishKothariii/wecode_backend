@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
-const getuserid = require("../utils/getuserid");
 require("dotenv").config({ path: ".././.env" });
 const JWT_SECRET = process.env.JWT_SECRET; // Replace with your actual secret
 
@@ -20,7 +19,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     // Attach user to request
-
+    req.user = user;
     next();
   } catch (err) {
     throw err;

@@ -1,17 +1,34 @@
-const { Queue } = require("bullmq");
-const { Redis } = require("ioredis"); // Import Redis client
+// Import necessary AWS SDK v3 clients and utilities
+const { SQSClient, SendMessageCommand } = require("@aws-sdk/client-sqs");
+require("dotenv").config({ path: ".././.env" }); // Make sure this is at the top
 
-const connection = new Redis({
-  host: "localhost", // Replace with your Redis host
-  port: 6379, // Default Redis port, change if needed
-  maxRetriesPerRequest: null, // Required for BullMQ
-});
+// Manually define AWS credentials (make sure to use your actual credentials)
+const awsConfig = {
+  region: "ap-south-1", // Your AWS region (e.g., 'ap-south-1')
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY, // Replace with your AWS access key ID
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // Replace with your AWS secret access key
+  },
+  // Optional: Specify the endpoint if necessary (usually needed for local testing)
+  // endpoint: "https://sqs.ap-south-1.amazonaws.com" // Uncomment if needed
+};
 
-const evaluation = new Queue("evaluation");
+// Create an SQS client with the manually specified credentials
+const sqsClient = new SQSClient(awsConfig);
 async function produce(submissionData) {
-  const res = await evaluation.add("my-job", submissionData, {
-    removeOnComplete: true,
-  });
-  console.log("Job added to queue", res.id);
+  // Define the message payload
+  const message = {
+    MessageBody: JSON.stringify({ key: "value" }), // The message content
+    QueueUrl: process.env.QUEUE_URL, // The URL of your SQS queue
+  };
+
+  try {
+    const command = new SendMessageCommand(message);
+    const data = await sqsClient.send(command);
+    console.log("Message sent successfully:", data.MessageId);
+  } catch (error) {
+    console.error("Error sending message:", error);
+  }
 }
+
 module.exports = { produce };

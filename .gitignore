@@ -4,3 +4,4 @@ api/.env
 evaluation/node_modules
 evaluation/.env
 frontend/node_modules
+frontend/public

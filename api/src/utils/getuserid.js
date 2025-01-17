@@ -11,8 +11,8 @@ const getUserId = (req) => {
     }
 
     // Decode the token
-    const decoded = jwt.verify(token, JWT_SECRET);
-
+    const decoded = jwt.decode(token, JWT_SECRET);
+    console.log(decoded);
     // Return the user ID from the payload
     return decoded.id;
   } catch (err) {

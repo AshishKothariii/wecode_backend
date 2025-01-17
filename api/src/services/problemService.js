@@ -40,16 +40,9 @@ const getProblemById = async (problemId) => {
 const getProblems = async () => {
   try {
     // Find all problems from the database
-    const problems = await Problem.find();
+    const problems = await problemRepository.getProblem();
 
-    // Manually create an array of objects with only the required fields
-    const problemsData = problems.map((problem) => ({
-      problemId: problem._id, // MongoDB _id field is used as problemId
-      problemTitle: problem.title,
-      solvedBy: problem.solved_by,
-    }));
-
-    return problemsData;
+    return problems;
   } catch (err) {
     throw err; // Error handling
   }
