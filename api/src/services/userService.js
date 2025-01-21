@@ -1,59 +1,49 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt"); // Add bcrypt for hashing passwords
+const bcrypt = require("bcrypt");
 const userRepository = require("../repository/userRepository");
 
 require("dotenv").config({ path: ".././.env" });
-const JWT_SECRET = "ashishislord";
-// Create a new user
+const JWT_SECRET = process.env.JWT_SECRET;
+// In userService.js
 const createUser = async (userData) => {
   try {
-    if (!userData.name || !userData.email || !userData.password) {
-      throw new Error("All fields (name, email, password) are required");
+    if (!userData.username || !userData.email || !userData.password) {
+      throw new Error("MISSING_FIELDS");
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userData.email)) {
-      throw new Error("Invalid email format");
-    }
-    const existingUser = await userRepository.findUserByEmail(userData.email);
-    if (existingUser) {
-      throw new Error("Email is already in use");
-    }
+    // Use parallel checks for better performance
+    const [existingEmail, existingUsername] = await Promise.all([
+      userRepository.findUserByEmail(userData.email),
+      userRepository.findUserByUserName(userData.username),
+    ]);
 
-    const user = await userRepository.createUser({
-      ...userData,
-      password: userData.password, // Save the hashed password
-    });
-
-    return { username: user.username, email: user.useremail };
+    if (existingEmail) throw new Error("EMAIL_EXISTS");
+    if (existingUsername) throw new Error("USERNAME_EXISTS");
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    return userRepository.createUser(userData);
   } catch (err) {
     throw err;
   }
 };
-
 const loginUser = async (email, password, res) => {
   try {
-    // Find the user by email
     const user = await userRepository.findUserByEmail(email);
     if (!user) {
       throw new Error("User not found");
     }
 
-    // Direct password comparison (plain text)
     if (user.password !== password) {
       throw new Error("Incorrect password");
     }
 
-    // Generate JWT token
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
       expiresIn: "3600000",
     });
 
-    // Set JWT token in HTTP-only cookie
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: false, // Set to true in production
-      sameSite: "Strict", // Prevents CSRF attacks
+      secure: false,
+      sameSite: "Strict",
     });
     return {
       username: user.username,
@@ -63,14 +53,15 @@ const loginUser = async (email, password, res) => {
     throw err;
   }
 };
-// Find user by ID
 const findById = async (userId) => {
   try {
     const user = await userRepository.findUserById(userId);
     return {
-      name: user.name,
+      name: user.username,
       email: user.email,
       accepted_count: user.accepted_count,
+      tle_count: user.tle_count,
+      wrong_count: user.wrong_count,
     };
   } catch (err) {
     throw err;

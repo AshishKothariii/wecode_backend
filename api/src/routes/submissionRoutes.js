@@ -26,14 +26,14 @@ router.get(
   authMiddleware,
   rateLimit.tokenLimiter,
 
-  submissionController.getSubmissionByUserId
+  submissionController.getSubmissionByUserName
 );
 router.get(
-  "/problem/:problem_id/user/:user_id",
+  "/problem/:problem_id/user/:username",
   authMiddleware,
   rateLimit.tokenLimiter,
 
-  submissionController.getSubmissionByProblemUserId
+  submissionController.getSubmissionByProblemUserName
 );
 
 module.exports = router;

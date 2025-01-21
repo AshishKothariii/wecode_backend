@@ -1,9 +1,9 @@
 const Submission = require("../models/submissionModel");
-const mongoose = require("mongoose");
 
 const createSubmission = async (submissionData) => {
   try {
     const submission = new Submission(submissionData);
+
     return await submission.save();
   } catch (err) {
     throw err;
@@ -26,28 +26,28 @@ const getSubmissionById = async (data) => {
 const getSubmissionsByProblemId = async (data) => {
   try {
     const results = await Submission.find(data);
-    console.log("trying");
     return results.map((result) => ({
       result: result.result,
-      submission_id: result.submission_id,
-      user_id: result.user_id,
+      submission_id: result._id,
       language: result.language,
       problem_id: result.problem_id,
-      user_name: result.user_name,
+      username: result.username,
+      createdAt: result.createdAt,
       problem_name: result.problem_name,
     }));
   } catch (err) {
     throw err;
   }
 };
-const getSubmissionsByUserId = async (data) => {
+const getSubmissionsByUserName = async (data) => {
   try {
     const results = await Submission.find(data);
     return results.map((result) => ({
       result: result.result,
-      submission_id: result.submission_id,
-      user_id: result.user_id,
+      submission_id: result._id,
+      username: result.username,
       language: result.language,
+      createdAt: result.createdAt,
       problem_id: result.problem_id,
       problem_name: result.problem_name,
     }));
@@ -55,26 +55,29 @@ const getSubmissionsByUserId = async (data) => {
     throw err;
   }
 };
-const getSubmissionsByProblemUserId = async (data) => {
+const getSubmissionsByProblemUserName = async (data) => {
   try {
-    const { problem_id, user_id } = data;
-
     const results = await Submission.find({
-      problem_id: problem_id,
-      user_id: user_id,
+      problem_id: data.problem_id,
+
+      username: data.username,
     });
 
     if (results.length === 0) {
-      console.log("No submissions found for the given problem_id and user_id.");
+      console.log(
+        "No submissions found for the given problem_id and username."
+      );
       return [];
     }
 
     return results.map((result) => ({
       result: result.result,
-      submission_id: result.submission_id,
-      user_id: result.user_id,
+      submission_id: result._id,
+      username: result.username,
       language: result.language,
       problem_id: result.problem_id,
+      createdAt: result.createdAt,
+
       problem_name: result.problem_name,
     }));
   } catch (err) {
@@ -87,6 +90,6 @@ module.exports = {
   updateSubmission,
   getSubmissionById,
   getSubmissionsByProblemId,
-  getSubmissionsByUserId,
-  getSubmissionsByProblemUserId,
+  getSubmissionsByUserName,
+  getSubmissionsByProblemUserName,
 };

@@ -3,12 +3,7 @@ const router = express.Router();
 const problemController = require("../controllers/problemController");
 const authMiddleware = require("../middleware/authMiddleware");
 const rateLimit = require("../middleware/rateLimmiter");
-router.post(
-  "/",
-  authMiddleware,
-  rateLimit.tokenLimiter,
-  problemController.createProblem
-);
+
 router.get(
   "/",
   authMiddleware,

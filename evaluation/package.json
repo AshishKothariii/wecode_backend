@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "child_process": "^1.0.2",
+    "dotenv": "^16.4.7",
+    "mongoose": "^8.9.5",
+    "ps-tree": "^1.2.0"
+  }
+}

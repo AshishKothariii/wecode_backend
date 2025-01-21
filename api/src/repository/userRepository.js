@@ -1,37 +1,40 @@
 const User = require("../models/userModel");
-
-// Save a user in the database
 const createUser = async (userData) => {
   try {
     const user = new User(userData);
-    return await user.save(); // Save the user document
+    return await user.save();
   } catch (err) {
-    throw err; // Propagate error to the service or controller
+    throw err;
   }
 };
 
-// Find a user by email
 const findUserByEmail = async (email) => {
   try {
-    console.log(email);
-    // Use Mongoose's findOne method to search by email
     const user = await User.findOne({ email: email });
-    return user; // Returns the user document or null if not found
+    return user;
   } catch (err) {
-    throw err; // Propagate error to the service or controller
+    throw err;
+  }
+};
+const findUserByUserName = async (username) => {
+  try {
+    const user = await User.findOne({ username: username });
+    return user;
+  } catch (err) {
+    throw err;
   }
 };
 const findUserById = async (id) => {
   try {
-    // Use Mongoose's findOne method to search by emai
     const user = await User.findOne({ _id: id });
-    return user; // Returns the user document or null if not found
+    return user;
   } catch (err) {
-    throw err; // Propagate error to the service or controller
+    throw err;
   }
 };
 module.exports = {
   createUser,
   findUserByEmail,
   findUserById,
+  findUserByUserName,
 };

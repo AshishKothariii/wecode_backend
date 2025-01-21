@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/signup", rateLimit.authLimiter, userController.createUser);
 router.post("/login", rateLimit.authLimiter, userController.loginUser);
 router.get(
-  "/:id",
+  "/",
   authMiddleware,
   rateLimit.tokenLimiter,
   userController.getProfile

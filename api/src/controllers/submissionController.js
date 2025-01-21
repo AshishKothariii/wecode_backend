@@ -3,22 +3,21 @@ const getuserid = require("../utils/getuserid");
 const submitByProblemId = async (req, res) => {
   try {
     const user_id = getuserid.getUserId(req);
-    console.log(user_id);
     const data = req.body;
     const submissionData = {
       language: data.language,
       user_id: user_id,
-      submission_id: data.submission_id,
       problem_id: req.params.id,
-      problem_name: data.problem_name,
+      username: data.username,
       code: data.code,
     };
     const result = await submissionService.submit(submissionData);
     return res.status(200).json({
+      submission_id: result._id,
       status: result.result,
       problem_id: result.problem_id,
+      username: result.username,
       language: result.language,
-      submission_id: result.submission_id,
       problem_name: result.problem_name,
     });
   } catch (error) {
@@ -34,6 +33,7 @@ const getSubmissionsByProblemId = async (req, res) => {
     const result = await submissionService.getSubmissionsByProblemId({
       problem_id: id,
     });
+    console.log(result);
     return res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ err: err.message });
@@ -43,8 +43,10 @@ const getSubmissionsByProblemId = async (req, res) => {
 const getSubmissionById = async (req, res) => {
   try {
     const id = req.params.id;
+    console.log(id);
+    console.log("get");
     const result = await submissionService.getSubmissionById({
-      submission_id: id,
+      _id: id,
     });
     return res.status(200).json(result);
   } catch (err) {
@@ -52,25 +54,25 @@ const getSubmissionById = async (req, res) => {
     throw err;
   }
 };
-const getSubmissionByUserId = async (req, res) => {
+const getSubmissionByUserName = async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await submissionService.getSubmissionsByUserId({
-      user_id: id,
+    const result = await submissionService.getSubmissionsByUserName({
+      username: id,
     });
+    console.log(result);
     return res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ err: err.message });
     throw err;
   }
 };
-const getSubmissionByProblemUserId = async (req, res) => {
+const getSubmissionByProblemUserName = async (req, res) => {
   try {
-    console.log(req.params);
     const data = req.params;
-    const result = await submissionService.getSubmissionByProblemUserId({
+    const result = await submissionService.getSubmissionByProblemUserName({
       problem_id: data.problem_id,
-      user_id: data.user_id,
+      username: data.username,
     });
     return res.status(200).json(result);
   } catch (err) {
@@ -81,7 +83,7 @@ const getSubmissionByProblemUserId = async (req, res) => {
 module.exports = {
   submitByProblemId,
   getSubmissionById,
-  getSubmissionByUserId,
+  getSubmissionByUserName,
   getSubmissionsByProblemId,
-  getSubmissionByProblemUserId,
+  getSubmissionByProblemUserName,
 };

@@ -1,11 +1,10 @@
 const problemRepository = require("../repository/problemRepository");
-const Problem = require("../models/problemModel"); // Assuming your schema is in problemModel.js
+const Problem = require("../models/problemModel");
 const userRepository = require("../repository/userRepository");
 
 const createProblem = async (problemData) => {
   try {
     const user = userRepository.findUserById(problemData.user_id);
-
     return await problemRepository.createProblem(problemData);
   } catch (err) {
     throw err;
@@ -14,37 +13,26 @@ const createProblem = async (problemData) => {
 
 const getProblemById = async (problemId) => {
   try {
-    // Find the problem by ID
-    const problem = await Problem.findById({ _id: problemId });
-
-    // Check if problem exists
-    if (!problem) {
-      throw new Error("Problem not found");
-    }
-
+    const problem = await problemRepository.getProblemById(problemId);
     const problemData = {
       title: problem.title,
       description: problem.description,
-      input_format: problem.input_format,
-      output_format: problem.output_format,
-      constraints: problem.constraints,
+      input_cases: problem.sample_test_cases,
+      output_cases: problem.sample_output_cases,
       solved_by: problem.solved_by,
       createdAt: problem.createdAt,
     };
-
     return problemData;
   } catch (err) {
-    throw err; // Error handling
+    throw err;
   }
 };
 const getProblems = async () => {
   try {
-    // Find all problems from the database
     const problems = await problemRepository.getProblem();
-
     return problems;
   } catch (err) {
-    throw err; // Error handling
+    throw err;
   }
 };
 

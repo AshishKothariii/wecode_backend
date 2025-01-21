@@ -7,18 +7,38 @@ import Problem from "./pages/Problem";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import Statement from "./pages/Statement";
+import { AuthContext } from "./AuthContext";
+import { useContext } from "react";
+import LoggedinHome from "./pages/LoggedinHome";
 
 function App() {
+  const { user } = useContext(AuthContext);
+
   return (
     <div className="pl-10 pr-10 pt-4">
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/problems" element={<Problem />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/problems/:id" element={<Statement></Statement>} />
+          <Route
+            path="/"
+            element={user ? <LoggedinHome></LoggedinHome> : <Home />}
+          />
+          <Route
+            path="/login"
+            element={user ? <LoggedinHome></LoggedinHome> : <Login />}
+          />
+          <Route
+            path="/signup"
+            element={user ? <LoggedinHome></LoggedinHome> : <Signup />}
+          />
+          <Route
+            path="/problems"
+            element={user ? <Problem /> : <Home></Home>}
+          />
+          <Route path="/profile" element={user ? <Profile /> : <Home></Home>} />
+          <Route
+            path="/problems/:id"
+            element={user ? <Statement></Statement> : <Home></Home>}
+          />
         </Routes>
       </Router>
     </div>

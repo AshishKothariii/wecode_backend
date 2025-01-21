@@ -2,7 +2,6 @@ const { request } = require("express");
 const problemService = require("../services/problemService");
 const { getUserId } = require("../utils/getuserid");
 
-//also auth
 const createProblem = async (req, res) => {
   try {
     const {
@@ -44,7 +43,7 @@ const createProblem = async (req, res) => {
 const getProblemById = async (req, res) => {
   try {
     const problem_id = req.params.id;
-    console.log(problem_id);
+
     if (!problem_id) {
       return res.status(400).json({ message: "Problem ID is required" });
     }
