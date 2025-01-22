@@ -41,7 +41,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/login",
+        "api/user/login",
         {
           email: email,
           password: password,
@@ -59,7 +59,6 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
-      alert(error.response?.data?.error || "Login failed. Please try again.");
     }
   };
 

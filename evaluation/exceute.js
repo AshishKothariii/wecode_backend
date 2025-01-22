@@ -29,28 +29,32 @@ const executecpp = async (data) => {
             result: "accepted",
             test_cases_passed: res.passed,
           }
-        ).exec();
+        );
 
         if (!ans) {
           throw new Error("Submission not found");
         }
-
-        const userUpdateResult = await User.updateOne(
-          {
-            username: ans.username,
-            accepted_problem: { $ne: problem._id },
-          },
-          {
-            $addToSet: { accepted_problem: problem._id },
-            $inc: { accepted_count: 1 },
+        const user = await User.findOne({ _id: ans.user_id });
+        const isproblem = false;
+        for (let i = 0; i < user.accepted_count; i++) {
+          console.log("problem id: ", problem._id);
+          console.log("accepted problem: ", user.accepted_problem[i]);
+          if (user.accepted_problem[i] === problem._id) {
+            isproblem = true;
           }
-        ).exec();
-
-        if (userUpdateResult.modifiedCount > 0) {
-          await Problem.updateOne(
-            { problem_id: ans.problem_id },
+        }
+        if (!isproblem) {
+          await Problem.findOneAndUpdate(
+            { _id: problem._id },
             { $inc: { solved_by: 1 } }
-          ).exec();
+          );
+          await User.findOneAndUpdate(
+            { _id: ans.user_id },
+            {
+              $inc: { accepted_count: 1 },
+              $push: { accepted_problem: problem._id },
+            }
+          );
         }
       } catch (error) {
         console.error("Error processing acceptance:", error);
@@ -65,12 +69,12 @@ const executecpp = async (data) => {
       );
       if (res.errorMsg === "TLE") {
         await User.findOneAndUpdate(
-          { username: ans.username },
+          { username: ans.user_id },
           { $inc: { tle_count: 1 } }
         );
       } else {
         await User.findOneAndUpdate(
-          { username: ans.username },
+          { username: ans.user_id },
           { $inc: { wrong_count: 1 } }
         );
       }

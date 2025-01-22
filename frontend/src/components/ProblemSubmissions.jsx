@@ -18,7 +18,7 @@ const ProblemSubmissions = ({ problemId }) => {
       setLoadingSubmissions(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/submission/problem/${problemId}`,
+          `/api/submission/problem/${problemId}`,
           { withCredentials: true }
         );
         const sortedSubmissions = response.data.sort((a, b) =>

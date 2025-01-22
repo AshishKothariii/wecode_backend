@@ -61,7 +61,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/signup",
+        "/api/user/signup",
         {
           username: name,
           email: email,

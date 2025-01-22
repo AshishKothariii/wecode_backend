@@ -10,8 +10,6 @@ const problemSchema = new mongoose.Schema(
     test_cases: { type: [String], required: true },
     output_cases: { type: [String], required: true },
     solved_by: { type: Number, default: 0 },
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    user_name: { type: String, required: true },
   },
   { timestamps: true }
 );

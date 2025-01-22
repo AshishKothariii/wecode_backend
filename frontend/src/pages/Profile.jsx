@@ -44,12 +44,12 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const userResponse = await axios.get("http://localhost:3000/user", {
+        const userResponse = await axios.get("/api/user", {
           withCredentials: true,
         });
 
         const submissionResponse = await axios.get(
-          `http://localhost:3000/submission/user/${username}`,
+          `/api/submission/user/${username}`,
           { withCredentials: true }
         );
         setProfileData({

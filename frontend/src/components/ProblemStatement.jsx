@@ -12,10 +12,9 @@ const ProblemStatement = ({ problemId }) => {
   useEffect(() => {
     const fetchProblemStatement = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/problem/${problemId}`,
-          { withCredentials: true }
-        );
+        const response = await axios.get(`/api/problem/${problemId}`, {
+          withCredentials: true,
+        });
 
         setProblemTitle(response.data.title);
         setProblemStatement(response.data.description);

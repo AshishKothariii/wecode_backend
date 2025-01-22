@@ -10,7 +10,7 @@ const Problem = () => {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/problem", {
+        const response = await axios.get("/api/problem", {
           withCredentials: true,
         });
         setProblems(response.data);

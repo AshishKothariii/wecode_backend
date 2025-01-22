@@ -50,7 +50,7 @@ async function pollQueue() {
       }
     } else {
       console.log("No messages available, retrying...");
-      await delay(1000);
+      await delay(1 * 30 * 1000);
     }
   } catch (receiveError) {
     console.error("Error receiving message:", receiveError);

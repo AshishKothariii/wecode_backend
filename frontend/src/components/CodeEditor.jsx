@@ -73,7 +73,7 @@ func main() {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/submission/problem/${problemId}`,
+        `/api/submission/problem/${problemId}`,
         qs.stringify(submissionData),
         {
           headers: {

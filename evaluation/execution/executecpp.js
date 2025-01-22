@@ -134,11 +134,10 @@ const executeCpp = (code, inputs, outputs, submissionId) => {
         console.log(`Input written to file: ${inputFilePath}`);
 
         const runCommand = `ulimit -v ${memoryLimit} && "${outPath}" < "${inputFilePath}"`;
-
         console.log(`Executing: ${runCommand}`);
         let outputData = "";
 
-        const process = exec(runCommand, { timeout: timeLimit });
+        const process = exec(runCommand, { timeout: timeLimit + 100 });
 
         process.stdout.on("data", (data) => {
           outputData += data.toString();

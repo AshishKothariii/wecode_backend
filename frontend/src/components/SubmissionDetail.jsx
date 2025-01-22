@@ -31,7 +31,7 @@ const SubmissionDetail = ({ submission, onClose }) => {
     if (submission) {
       setLoading(true);
       axios
-        .get(`http://localhost:3000/submission/${submission.submission_id}`, {
+        .get(`/api/submission/${submission.submission_id}`, {
           withCredentials: true,
         })
         .then((response) => {
