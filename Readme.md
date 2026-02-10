@@ -1,10 +1,10 @@
-# WeCode Backend
+# Distributed Online Judge (WeCode)
 
 A full-stack online coding judge platform that allows users to solve programming problems, submit code solutions, and have them automatically evaluated.
 
 ## 🏗️ Architecture
 
-WeCode Backend is a microservices-based system consisting of three main components:
+WeCode is a microservices-based system consisting of three main components:
 
 - **API Server**: REST API built with Express.js for user management, problem management, and submission handling
 - **Evaluation Engine**: Standalone service for executing and evaluating code submissions
